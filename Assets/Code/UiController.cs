@@ -9,12 +9,14 @@ public class UiController : MonoBehaviour
     public float time;
     public static bool isGameOver;
     Text remainTime;
+    Text Score;
     
     private void Awake()
     {
-        time = 10f;
+        time = 30f;
         isGameOver = false;
         remainTime = GameObject.Find("remainTime").GetComponent<Text>();
+        Score = GameObject.Find("Score").GetComponent<Text>();
     }
 
     private void FixedUpdate()
@@ -26,6 +28,11 @@ public class UiController : MonoBehaviour
             isGameOver = true;
             SceneManager.LoadScene("MainScene");
             return;
+        }
+        if (BasketballController.calcScore)
+        {
+            Score.text = "分数:" + BasketballController.score;
+            BasketballController.calcScore = false;
         }
         remainTime.text = "倒计时:" + t + "秒";
     }
