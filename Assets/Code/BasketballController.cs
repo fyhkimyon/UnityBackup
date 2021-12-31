@@ -45,15 +45,46 @@ public class BasketballController : MonoBehaviour {
         calcScore = false;
         hoopPosition = new Vector3(0f, 0f, 8f);
     }
-
+    
     // Update is called once per frame
     void Update() 
-    {    
+    {
         // walking
-        Vector3 direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        transform.position += direction * MoveSpeed * Time.deltaTime * speedAdd;
-        transform.LookAt(transform.position + direction);
+        //Vector3 direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        //transform.position += direction * MoveSpeed * Time.deltaTime * speedAdd;
+        //transform.LookAt(transform.position + direction);
+        Vector3 dv = Target.parent.position - transform.position;
+        Vector3 mp = transform.position;
+        mp.y = 0;
+        dv.y = 0;
+        dv = dv.normalized;
+        Vector3 direction = new Vector3(0, 0, 0);
+        if (Input.GetKey(KeyCode.W))
+        {
+            direction += dv;
+        }
 
+        if (Input.GetKey(KeyCode.S))
+        {
+            direction -= dv;
+        }
+
+        float angle = Mathf.PI / 2;
+        Vector3 dv2 = new Vector3(dv.x * Mathf.Cos(angle) - dv.z * Mathf.Sin(angle), 0, dv.x * Mathf.Sin(angle) + dv.z * Mathf.Cos(angle));
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            direction += dv2;
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            direction -= dv2;
+        }
+
+        transform.position += direction * MoveSpeed * Time.deltaTime * speedAdd;
+
+        transform.LookAt(Target.parent.position);
         // ball in hands
         if (IsBallInHands) 
         {
