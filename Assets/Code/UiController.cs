@@ -11,6 +11,7 @@ public class UiController : MonoBehaviour
     Text remainTime;
     Text Score;
     public static Text skills;
+    public static Image bar;
     
     private void Awake()
     {
@@ -19,6 +20,8 @@ public class UiController : MonoBehaviour
         remainTime = GameObject.Find("remainTime").GetComponent<Text>();
         Score = GameObject.Find("Score").GetComponent<Text>();
         skills = GameObject.Find("skills").GetComponent<Text>();
+        bar = GameObject.Find("bar").GetComponent<Image>();
+        bar.fillAmount = 0f;
     }
 
     private void FixedUpdate()

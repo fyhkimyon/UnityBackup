@@ -98,6 +98,7 @@ public class BasketballController : MonoBehaviour {
                 //Debug.Log("distance:" + distance);
                 T = 0;
                 spacePressTime = 0;
+                UiController.bar.fillAmount = 0f;
             }
         }
 
@@ -146,12 +147,17 @@ public class BasketballController : MonoBehaviour {
             }
         }
 
-        if (Input.GetKey(KeyCode.Space))
+        if (IsBallInHands && Input.GetKey(KeyCode.Space))
         {
             spacePressTime += Time.fixedDeltaTime;
+            UiController.bar.fillAmount += Time.fixedDeltaTime / 1.8f;
             if (spacePressTime >= 1.8f)
             {
                 spacePressTime = 1.8f;
+            }
+            if (UiController.bar.fillAmount >= 1.0)
+            {
+                UiController.bar.fillAmount = 1.0f;
             }
         }
 
