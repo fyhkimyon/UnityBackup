@@ -15,10 +15,21 @@ public class BasketballController : MonoBehaviour {
     private bool IsBallInHands = true;
     private bool IsBallFlying = false;
     private float T = 0;
+    public static int score = 0;
+    private Vector3 delta;
+    private Vector3 hoopPosition;
+    private int level;
+
+    private void Start()
+    {
+        level = 0;
+        score = 0;
+        hoopPosition = new Vector3(0f, 0f, 8f);
+    }
 
     // Update is called once per frame
     void Update() {
-
+        
         // walking
         Vector3 direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         transform.position += direction * MoveSpeed * Time.deltaTime;
@@ -31,7 +42,8 @@ public class BasketballController : MonoBehaviour {
             if (Input.GetKey(KeyCode.Space)) {
                 Ball.position = PosOverHead.position;
                 Arms.localEulerAngles = Vector3.right * 180;
-
+                delta = transform.position - hoopPosition;
+                delta.y = 0;
                 // look towards the target
                 transform.LookAt(Target.parent.position);
             }
@@ -46,6 +58,11 @@ public class BasketballController : MonoBehaviour {
             if (Input.GetKeyUp(KeyCode.Space)) {
                 IsBallInHands = false;
                 IsBallFlying = true;
+                float distance = delta.sqrMagnitude;
+
+                //if (distance < )
+
+                Debug.Log("distance" + distance);
                 T = 0;
             }
         }
