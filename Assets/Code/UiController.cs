@@ -6,10 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class UiController : MonoBehaviour
 {
-    public float time;
+    public static float time;
     public static bool isGameOver;
     Text remainTime;
     Text Score;
+    public static Text skills;
     
     private void Awake()
     {
@@ -17,6 +18,7 @@ public class UiController : MonoBehaviour
         isGameOver = false;
         remainTime = GameObject.Find("remainTime").GetComponent<Text>();
         Score = GameObject.Find("Score").GetComponent<Text>();
+        skills = GameObject.Find("skills").GetComponent<Text>();
     }
 
     private void FixedUpdate()

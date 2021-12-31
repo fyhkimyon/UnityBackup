@@ -25,8 +25,18 @@ public class BasketballController : MonoBehaviour {
     public static bool calcScore;
     public float spacePressTime;
 
+    //skills
+    public static bool isCooling;
+    public bool inSkill;
+    public float skillDuring;
+    public float speedAdd = 1.0f;
+    public int missSub = 0;
+
     private void Start()
     {
+        skillDuring = 0;
+        isCooling = false;
+        inSkill = false;
         spacePressTime = 0;
         stuckTime = 0f;
         level = 0;
@@ -41,7 +51,7 @@ public class BasketballController : MonoBehaviour {
     {    
         // walking
         Vector3 direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        transform.position += direction * MoveSpeed * Time.deltaTime;
+        transform.position += direction * MoveSpeed * Time.deltaTime * speedAdd;
         transform.LookAt(transform.position + direction);
 
         // ball in hands
@@ -75,6 +85,8 @@ public class BasketballController : MonoBehaviour {
                 else if (distance < 100) level = 0;
                 else if (distance < 180) level = 1;
                 else level = 2;
+                level -= missSub;
+                if (level < 0) level = 0;
                 if (distance < 300) rewardScore = 2;
                 else if (distance < 450) rewardScore = 3;
                 else rewardScore = 4;
@@ -118,6 +130,12 @@ public class BasketballController : MonoBehaviour {
     // when ball stack in the hoop
     private void FixedUpdate()
     {
+        if (speedAdd > 1.0)
+        {
+            speedAdd -= Time.fixedDeltaTime / (1 + 8 * speedAdd);
+            if (speedAdd <= 1.0f) speedAdd = 1.0f;
+        }
+
         if (!IsBallInHands && !IsBallFlying)
         {
             stuckTime += Time.fixedDeltaTime;
@@ -134,6 +152,44 @@ public class BasketballController : MonoBehaviour {
             if (spacePressTime >= 1.8f)
             {
                 spacePressTime = 1.8f;
+            }
+        }
+
+        if (!isCooling)
+        {
+            if (Input.GetKey(KeyCode.J))
+            {
+                skillDuring = 10;
+                missSub = 1;
+                UiController.skills.text = "shooting add";
+                inSkill = true;
+                isCooling = true;
+            }
+            else if (Input.GetKey(KeyCode.K))
+            {
+                skillDuring = 10;
+                speedAdd = 1.8f;
+                UiController.skills.text = "speed up";
+                inSkill = true;
+                isCooling = true;
+            }
+            else if (Input.GetKey(KeyCode.L))
+            {
+                UiController.time += 10.0f;
+                inSkill = true;
+                isCooling = true;
+            }
+        }
+
+        if (inSkill)
+        {
+            skillDuring -= Time.fixedDeltaTime;
+            if (skillDuring <= 0)
+            {
+                skillDuring = 0;
+                inSkill = false;
+                missSub = 0;
+                UiController.skills.text = "no skill";
             }
         }
     }
